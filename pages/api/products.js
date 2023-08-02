@@ -42,4 +42,14 @@ export default async function handle(req,res)
       await mongoose.model("Product").updateOne({_id},{title,description,price});
       res.json(true);
     }
+
+    if(method === 'DELETE')
+    {
+      //mongoosedb is using _id
+       if(req.query?.id)
+       {
+          await mongoose.model("Product").deleteOne({_id:req.query?.id});
+          res.json(true);
+       }
+    }
 }
