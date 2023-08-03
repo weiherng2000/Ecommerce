@@ -30,7 +30,8 @@ export default function DeleteProductPage(){
         await axios.delete('/api/products?id=' +id);
         goBack();
     }
-
+    
+    //&nbsp is to make  more whitespace for the text
     return (
        <Layout>
            <h1 className = "text-center">Do you really want to delete &nbsp;"{productInfo?.title}"?</h1>

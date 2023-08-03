@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 
 export default async function handle(req,res)
 { 
+    //Extracting the HTTP method from the request:
     const {method} = req;
     //we connect to our database
     await mongooseConnect();

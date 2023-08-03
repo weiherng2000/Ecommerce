@@ -17,10 +17,12 @@ export default function ProductForm({_id,title : existingTitle,description: exis
     //send a post request
     //The await keyword ensures that the function waits for the POST request to complete before continuing
     //data here is an object and we use a short hand method to name it
+    //preventdefault prevents the browser fro refreshing
     async function saveProduct(ev){
         ev.preventDefault();
         const data = {title,description,price,images};
         //if id is not undefined we will update else we create
+        //put vs post: put is best used when updating data while post is for creating new data
         if(_id)
         {
             //update product
@@ -53,7 +55,7 @@ export default function ProductForm({_id,title : existingTitle,description: exis
             }
             const res = await axios.post('/api/upload', data);
             setImages(oldImages =>{
-                //create a new array with all the images and new link
+                //create a new array by merging the 2 arrays with all the images and new link
                 return [...oldImages, ...res.data.links];
             });
             setIsUploading(false);
