@@ -1,18 +1,25 @@
 import Layout from "@/components/Layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useRouter } from "next/router";
 import Spinner from "./spinner";
 import { ReactSortable } from "react-sortablejs";
 
-export default function ProductForm({_id,title : existingTitle,description: existingDescription,price: existingPrice,images:existingImages,}){
+export default function ProductForm({_id,title : existingTitle,description: existingDescription,price: existingPrice,images:existingImages,category:assignedCategory}){
     const [title,setTitle] = useState(existingTitle || '');
     const [description,setDescription] = useState(existingDescription || '');
+    const [category,setCategory] = useState(assignedCategory||'');
     const [price,setPrice] = useState(existingPrice || '');
     const [images,setImages] = useState(existingImages || []);
     const [goToProducts,setGoToProducts] = useState(false);
     const [isUploading,setIsUploading] = useState(false);
+    const [categories,setCategories] = useState([]);
     const router = useRouter();
+    useEffect(() =>{
+        axios.get('/api/categories').then(result => {
+            setCategories(result.data);
+        })
+    },[])
 
     //send a post request
     //The await keyword ensures that the function waits for the POST request to complete before continuing
@@ -20,7 +27,7 @@ export default function ProductForm({_id,title : existingTitle,description: exis
     //preventdefault prevents the browser fro refreshing
     async function saveProduct(ev){
         ev.preventDefault();
-        const data = {title,description,price,images};
+        const data = {title,description,price,images,category};
         //if id is not undefined we will update else we create
         //put vs post: put is best used when updating data while post is for creating new data
         if(_id)
@@ -73,10 +80,20 @@ export default function ProductForm({_id,title : existingTitle,description: exis
         //!! before images length to convert it to boolean
         <Layout>
             <form onSubmit={saveProduct}>
+
                 <label>Product name</label>
                 <input type = "text" placeholder="product name"
                 value = {title} onChange= {ev => setTitle(ev.target.value)}
                 />
+
+                <label>Category</label>
+                <select value = {category} onChange={ev => setCategory(ev.target.value)}>
+                    <option value = "">Uncategorized</option>
+                    {categories.length > 0 && categories.map(c =>(
+                        <option value = {c._id}>{c.name}</option>
+                    ))}
+                </select>
+
                 <label>
                     Photos
                 </label>

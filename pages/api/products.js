@@ -24,24 +24,25 @@ export default async function handle(req,res)
     }
     if(method === "POST")
     {
-       const {title,description,price,images} = req.body;
+       const {title,description,price,images,category} = req.body;
        const productDoc = await mongoose.model("Product").create({
         title,
         description,
         price,
         images,
+        category,
       });
         res.json(productDoc);
     }
 
     if(method === 'PUT')
     {
-      const{title,description,price,images,_id} = req.body;
+      const{title,description,price,images,category,_id} = req.body;
       //The API prototype.updateOne() of the Mongoose API is used to update 
       //documents in a collection. 
       //This method can be used on mongoose documents 
       //and on that document you can update various fields in one command.
-      await mongoose.model("Product").updateOne({_id},{title,description,price,images});
+      await mongoose.model("Product").updateOne({_id},{title,description,price,images,category});
       res.json(true);
     }
 
